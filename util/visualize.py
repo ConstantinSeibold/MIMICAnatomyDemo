@@ -233,7 +233,7 @@ def visualize_coco_annotations_pil(
     image = image.convert("RGBA")
     overlay = Image.new("RGBA", image.size, (255, 255, 255, 0))  # transparent overlay
 
-    colors = get_colors(coco)
+    colors = get_colors(len(coco))
     colors_alpha = get_colors_alpha(colors)
     category_colors = get_category_colors(colors)
 
@@ -302,8 +302,12 @@ def visualize_coco_annotations_pil(
         # Show class name if requested
         if show_class_name:
             cat_id = ann["category_id"]
-            category = coco.loadCats(cat_id)[0]["name"]
-            draw.text((x, y), category, fill=tuple(color))
+            bbox = ann["bbox"]
+            x, y, w, h = bbox
+            
+            category = coco[coco.id == cat_id].iloc[0]["name"]
+            
+            draw.text((x, y-20), category, fill=tuple(color))
 
     # Composite overlay with the original image
     annotated_image = Image.alpha_composite(image, overlay)
