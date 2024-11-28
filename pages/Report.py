@@ -25,7 +25,7 @@ def display_text_animated(text, sleep_time=0.1):
         
 # Page 2: Selected Image
 def image_detail_page():
-    print(st.session_state["selected_image"])
+
     if st.session_state["selected_image"] > -1:
         st.image(
             st.session_state["images"][st.session_state["selected_image"]],
@@ -42,9 +42,7 @@ def coordinate_in_bbox(coordinate, bbox):
     bbox_mean = np.array([bbox[0]+bbox[2]//2, bbox[1]+bbox[3]//2])
     
     coordinate2 = np.array(list(coordinate.values()))[:4]
-    # import pdb; pdb.set_trace()
-    # print(coordinate2)
-    # st.write(coordinate2)
+    
     
     coordinate2 = np.array([coordinate2[0]/coordinate2[2]*512, coordinate2[1]/coordinate2[3]*512])
     is_in = (coordinate2[0]>bbox[0]) *(coordinate2[0]<(bbox[0]+bbox[2])) * \
@@ -126,7 +124,7 @@ def interactive_page():
     with left:
         if st.session_state["selected_image"] > -1:
             value = streamlit_image_coordinates(st.session_state["current_image"], use_column_width=True)
-            print(value)
+
             if (st.session_state["coordinate_clicked"] != value) and not value is None:
                 st.session_state["coordinate_clicked"] = value
                 
@@ -160,13 +158,12 @@ def interactive_page():
             left_left, left_right = st.columns(2)
             with left_left:
                 if st.button("Clear Annotations"):
-                    st.session_state["current_image"] = st.session_state["images"][
-                        st.session_state["selected_image"]
-                    ]
+                    # import pdb;pdb.set_trace()
+                    st.session_state["current_image"] = st.session_state["image_path"]
                     st.rerun()
             with left_right:
-                if st.button("Back to the Galery"):
-                    st.switch_page("Galery.py")
+                if st.button("Back to the Gallery"):
+                    st.switch_page("Gallery.py")
 
         else:
             st.write("No image selected.")
